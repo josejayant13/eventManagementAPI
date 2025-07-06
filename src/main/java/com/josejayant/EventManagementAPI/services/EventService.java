@@ -1,10 +1,10 @@
 package com.josejayant.EventManagementAPI.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +29,27 @@ public class EventService {
 
     public ResponseEntity<List<Event>> viewAll(){
         return new ResponseEntity<>(eventRepo.findAll(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Event> getEventById(int event_id) {
+
+        Optional<Event> event = eventRepo.findById(event_id);
+        if(event.isPresent())
+            return new ResponseEntity<>(event.get(), HttpStatus.FOUND);
+        else
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        
+    }
+
+    public ResponseEntity<Void> deleteEventById(int event_id) {
+        if(getEventById(event_id).getStatusCode() == HttpStatus.FOUND)
+        {
+            eventRepo.deleteById(event_id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>( HttpStatus.NOT_FOUND);
+
     }
 
 }
