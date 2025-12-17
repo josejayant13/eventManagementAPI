@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+/*for fetching username, passwordfrom the database.
+* i have customized it to fetch user object. user object has ID, username and password*/
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -25,6 +27,10 @@ public class MyUserDetailsService implements UserDetailsService {
             System.out.println("User 404");
             throw new UsernameNotFoundException("User 404");
         }
+//        need to return UserDetails type object. Hence the User object must be converted.
+//        to UserDetails. UserDetials in an interface and UserPrincipal is implementation.
+//        In UserPrincipal class we will create the UserDetials object. First we need to pass the
+//        User object as input.
         return new UserPrincipal(user);
     }
 

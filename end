@@ -1,0 +1,87 @@
+[1mdiff --git a/src/main/java/com/josejayant/EventManagementAPI/config/JwtFilter.java b/src/main/java/com/josejayant/EventManagementAPI/config/JwtFilter.java[m
+[1mindex 979f195..2cc5710 100644[m
+[1m--- a/src/main/java/com/josejayant/EventManagementAPI/config/JwtFilter.java[m
+[1m+++ b/src/main/java/com/josejayant/EventManagementAPI/config/JwtFilter.java[m
+[36m@@ -10,9 +10,6 @@[m [mimport org.springframework.context.ApplicationContext;[m
+ import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;[m
+ import org.springframework.security.core.context.SecurityContextHolder;[m
+ import org.springframework.security.core.userdetails.UserDetails;[m
+[31m-import org.springframework.security.core.userdetails.UsernameNotFoundException;[m
+[31m-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;[m
+[31m-import org.springframework.security.web.authentication.WebAuthenticationDetails;[m
+ import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;[m
+ import org.springframework.stereotype.Component;[m
+ import org.springframework.web.filter.OncePerRequestFilter;[m
+[36m@@ -37,8 +34,6 @@[m [mpublic class JwtFilter extends OncePerRequestFilter {[m
+             throws ServletException, IOException     [m
+     {[m
+ [m
+[31m-        System.out.println("JwtFilter.doFilterInternal");[m
+[31m-[m
+         String authHeader = request.getHeader("Authorization");[m
+         String token = null;[m
+         String userName = null;[m
+[1mdiff --git a/src/main/java/com/josejayant/EventManagementAPI/controllers/ApiController.java b/src/main/java/com/josejayant/EventManagementAPI/controllers/ApiController.java[m
+[1mindex ddc13bf..5d4d0ad 100644[m
+[1m--- a/src/main/java/com/josejayant/EventManagementAPI/controllers/ApiController.java[m
+[1m+++ b/src/main/java/com/josejayant/EventManagementAPI/controllers/ApiController.java[m
+[36m@@ -31,7 +31,6 @@[m [mclass ApiController{[m
+     @PostMapping("/login")[m
+     public String login(@RequestBody User user)[m
+     {[m
+[31m-        System.out.println("Login Method called");[m
+         Authentication authentication = authenticationManager.authenticate([m
+                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));[m
+ [m
+[1mdiff --git a/src/main/java/com/josejayant/EventManagementAPI/services/EventService.java b/src/main/java/com/josejayant/EventManagementAPI/services/EventService.java[m
+[1mindex 5cd60c3..5ba2756 100644[m
+[1m--- a/src/main/java/com/josejayant/EventManagementAPI/services/EventService.java[m
+[1m+++ b/src/main/java/com/josejayant/EventManagementAPI/services/EventService.java[m
+[36m@@ -18,7 +18,6 @@[m [mpublic class EventService {[m
+     EventRepo eventRepo;[m
+ [m
+     public ResponseEntity<String> createEvent(Event event) {[m
+[31m-        System.out.println("EventService.createEvent");[m
+         Long createEventId = eventRepo.save(event).getEvent_id();[m
+ [m
+         if(createEventId > 0)[m
+[1mdiff --git a/src/main/java/com/josejayant/EventManagementAPI/services/JwtService.java b/src/main/java/com/josejayant/EventManagementAPI/services/JwtService.java[m
+[1mindex 1ecb6e5..c670eab 100644[m
+[1m--- a/src/main/java/com/josejayant/EventManagementAPI/services/JwtService.java[m
+[1m+++ b/src/main/java/com/josejayant/EventManagementAPI/services/JwtService.java[m
+[36m@@ -19,7 +19,6 @@[m [mimport java.util.Date;[m
+ import java.util.HashMap;[m
+ import java.util.Map;[m
+ import java.util.function.Function;[m
+[31m-import java.util.Optional;[m
+ [m
+ [m
+ @Service[m
+[36m@@ -53,14 +52,6 @@[m [mpublic class JwtService {[m
+         try{[m
+             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");[m
+             SecretKey secretKey = keyGen.generateKey();[m
+[31m-            System.out.println("-----------------------------------------------------");[m
+[31m-            System.out.println("Secret key :" + secretKey.toString());[m
+[31m-            // Print DB env vars to console[m
+[31m-            System.out.println("DB_URL: " + Optional.ofNullable(System.getenv("DB_URL")).orElse("(not set)"));[m
+[31m-            System.out.println("DB_USER: " + Optional.ofNullable(System.getenv("DB_USER")).orElse("(not set)"));[m
+[31m-            System.out.println("DB_PASSWORD: " + Optional.ofNullable(System.getenv("DB_PASSWORD")).orElse("(not set)"));[m
+[31m-            System.out.println("-----------------------------------------------------");[m
+[31m-        [m
+ [m
+             return Base64.getEncoder().encodeToString(secretKey.getEncoded());[m
+         } catch (NoSuchAlgorithmException e) {[m
+[1mdiff --git a/src/main/resources/application.properties b/src/main/resources/application.properties[m
+[1mindex f403401..0b1787e 100644[m
+[1m--- a/src/main/resources/application.properties[m
+[1m+++ b/src/main/resources/application.properties[m
+[36m@@ -6,7 +6,7 @@[m [mspring.datasource.username=${DB_USER}[m
+ spring.datasource.password=${DB_PASSWORD}[m
+ spring.datasource.driver-class-name=org.postgresql.Driver[m
+ spring.jpa.hibernate.ddl-auto=update[m
+[31m-spring.jpa.show-sql=true[m
+[32m+[m[32mspring.jpa.show-sql=false[m
+ # logging.level.org.springframework.core.env=DEBUG[m
+ # logging.level.root=DEBUG[m
+ [m

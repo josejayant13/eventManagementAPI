@@ -20,4 +20,16 @@ public class Event {
     private String description;
     private String date;
     private String venue;
+
+    public Event(Long event_id, String title, String description, String date, String venue) {
+        this.event_id = event_id;
+        this.title = title;
+        this.description = description;
+        this.date = date;
+        this.venue = venue;
+    }
+
+    public Event(){
+        
+    }
 }

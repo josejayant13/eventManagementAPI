@@ -34,24 +34,35 @@ public class SecurityConfig {
     }
 
     @Bean
+//This bean is for verifying an authentication object.
+//Verfication is done against the database.
+//DaoAuthenticationProvider is an implementation of this interface. AuthenticationProvider
+//    is originally an interface
     public AuthenticationProvider authProvider() {
         DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
+//        This method takes UserDetailsService type as an input. Hence created and passed.
+//        Creation is happening in MyUserDetailsService class.
         provider.setUserDetailsService(userDetailsService);
+//        Need to set the password encoder. So that Spring app is able to decrypt the password fetched
+//        from the database
         provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         return provider;
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
+    {
+//      csrf has been disabled
         http.csrf(customizer -> customizer.disable())
-                .authorizeHttpRequests(request -> request
+//          Endpoint "/" and any endpoint that starts with "/api/" will not require authentication.
+//          Any other request require authentication
+            .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/**","/").permitAll()
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session ->
+//            .httpBasic(ustomizer.withDefaults())C
+            .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
 
 //

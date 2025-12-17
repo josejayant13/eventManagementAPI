@@ -23,24 +23,24 @@ public class EventController {
     EventService eventService;
     
     @PostMapping("createEvent")
-    private ResponseEntity<String> createEvent(@RequestBody Event event){
+    public ResponseEntity<String> createEvent(@RequestBody Event event){
         System.out.println("EventController.createEvent");
         return eventService.createEvent(event);
     }
 
     @GetMapping("viewAll")
-    private ResponseEntity<List<Event>> viewAll(){
+    public ResponseEntity<List<Event>> viewAll(){
         return eventService.viewAll();
     }
 
     @GetMapping("{event_id}")
-    private ResponseEntity<Event> getEventById(@PathVariable int event_id)
+    public ResponseEntity<Event> getEventById(@PathVariable int event_id)
     {
         return eventService.getEventById(event_id);
     }
 
     @DeleteMapping("delete/{event_id}")
-    private ResponseEntity<Void> deleteEventById(@PathVariable int event_id)
+    public ResponseEntity<Void> deleteEventById(@PathVariable int event_id)
     {
         return eventService.deleteEventById(event_id);
     }
