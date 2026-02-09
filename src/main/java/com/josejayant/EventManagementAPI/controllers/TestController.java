@@ -8,7 +8,7 @@ public class TestController {
     
     @GetMapping("/")
     public String test(){
-        return "Hello World";
+        return "Hello World - this app got deployed using github actions";
     }
 
     @GetMapping("/endpoint1")
